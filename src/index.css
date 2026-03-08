@@ -1,0 +1,371 @@
+@import "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* AeroPredict Dark Aviation Theme */
+    --background: 210 50% 5%;
+    --foreground: 180 100% 95%;
+    
+    --card: 210 40% 8%;
+    --card-foreground: 180 100% 95%;
+    
+    --popover: 210 40% 8%;
+    --popover-foreground: 180 100% 95%;
+    
+    --primary: 160 100% 42%;
+    --primary-foreground: 210 50% 5%;
+    
+    --secondary: 210 30% 15%;
+    --secondary-foreground: 180 100% 90%;
+    
+    --muted: 210 25% 12%;
+    --muted-foreground: 210 20% 50%;
+    
+    --accent: 160 100% 42%;
+    --accent-foreground: 210 50% 5%;
+    
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 160 50% 20%;
+    --input: 210 30% 12%;
+    --ring: 160 100% 42%;
+    
+    --radius: 0.5rem;
+    
+    /* Aviation specific colors */
+    --radar-ring: 160 60% 25%;
+    --radar-glow: 160 100% 42%;
+    --runway-green: 142 76% 45%;
+    --runway-amber: 38 92% 50%;
+    --alert-red: 0 85% 55%;
+    --holding-yellow: 45 93% 47%;
+    --landing-green: 160 100% 42%;
+    --aircraft-cyan: 180 100% 50%;
+    
+    /* Sidebar specific */
+    --sidebar-background: 210 45% 6%;
+    --sidebar-foreground: 180 100% 95%;
+    --sidebar-primary: 160 100% 42%;
+    --sidebar-primary-foreground: 210 50% 5%;
+    --sidebar-accent: 210 30% 12%;
+    --sidebar-accent-foreground: 180 100% 90%;
+    --sidebar-border: 160 40% 15%;
+    --sidebar-ring: 160 100% 42%;
+  }
+
+  .dark {
+    --background: 210 50% 5%;
+    --foreground: 180 100% 95%;
+    
+    --card: 210 40% 8%;
+    --card-foreground: 180 100% 95%;
+    
+    --popover: 210 40% 8%;
+    --popover-foreground: 180 100% 95%;
+    
+    --primary: 160 100% 42%;
+    --primary-foreground: 210 50% 5%;
+    
+    --secondary: 210 30% 15%;
+    --secondary-foreground: 180 100% 90%;
+    
+    --muted: 210 25% 12%;
+    --muted-foreground: 210 20% 50%;
+    
+    --accent: 160 100% 42%;
+    --accent-foreground: 210 50% 5%;
+    
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 160 50% 20%;
+    --input: 210 30% 12%;
+    --ring: 160 100% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Radar styling */
+  .radar-container {
+    @apply relative overflow-hidden;
+    background: radial-gradient(ellipse at center, hsl(210 40% 8%) 0%, hsl(210 50% 3%) 100%);
+  }
+  
+  .radar-ring {
+    @apply absolute rounded-full border pointer-events-none;
+    border-color: hsl(var(--radar-ring) / 0.3);
+    box-shadow: 0 0 20px hsl(var(--radar-glow) / 0.1);
+  }
+  
+  .radar-glow {
+    box-shadow: 
+      0 0 30px hsl(var(--radar-glow) / 0.15),
+      0 0 60px hsl(var(--radar-glow) / 0.1),
+      inset 0 0 30px hsl(var(--radar-glow) / 0.05);
+  }
+  
+  /* Runway styling */
+  .runway {
+    @apply absolute h-2 rounded-sm;
+    box-shadow: 0 0 15px currentColor;
+  }
+  
+  .runway-green {
+    @apply bg-runway-green;
+    box-shadow: 0 0 20px hsl(var(--runway-green) / 0.6);
+  }
+  
+  .runway-amber {
+    @apply bg-runway-amber;
+    box-shadow: 0 0 20px hsl(var(--runway-amber) / 0.6);
+  }
+  
+  /* Aircraft marker */
+  .aircraft-marker {
+    @apply relative;
+    filter: drop-shadow(0 0 8px hsl(var(--aircraft-cyan)));
+  }
+  
+  .aircraft-marker.landing {
+    filter: drop-shadow(0 0 10px hsl(var(--landing-green)));
+  }
+  
+  .aircraft-marker.holding {
+    filter: drop-shadow(0 0 10px hsl(var(--holding-yellow)));
+  }
+  
+  .aircraft-marker.conflict {
+    animation: pulse-alert 1s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-alert {
+    0%, 100% { filter: drop-shadow(0 0 8px hsl(var(--alert-red))); }
+    50% { filter: drop-shadow(0 0 20px hsl(var(--alert-red))); }
+  }
+  
+  /* Flight card styling */
+  .flight-card {
+    @apply relative p-3 rounded-lg border transition-all duration-200;
+    background: linear-gradient(135deg, hsl(210 40% 10%) 0%, hsl(210 45% 8%) 100%);
+    border-color: hsl(var(--border) / 0.5);
+  }
+  
+  .flight-card:hover {
+    border-color: hsl(var(--primary) / 0.6);
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.15);
+  }
+  
+  .flight-card.active {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 25px hsl(var(--primary) / 0.25);
+  }
+  
+  /* Safety bar */
+  .safety-bar {
+    @apply h-1.5 rounded-full overflow-hidden;
+    background: hsl(var(--muted));
+  }
+  
+  .safety-bar-fill {
+    @apply h-full rounded-full transition-all duration-500;
+  }
+  
+  .safety-bar-fill.high {
+    background: linear-gradient(90deg, hsl(var(--landing-green)), hsl(160 100% 50%));
+    box-shadow: 0 0 10px hsl(var(--landing-green) / 0.5);
+  }
+  
+  .safety-bar-fill.medium {
+    background: linear-gradient(90deg, hsl(var(--holding-yellow)), hsl(45 100% 55%));
+    box-shadow: 0 0 10px hsl(var(--holding-yellow) / 0.5);
+  }
+  
+  .safety-bar-fill.low {
+    background: linear-gradient(90deg, hsl(var(--alert-red)), hsl(0 85% 60%));
+    box-shadow: 0 0 10px hsl(var(--alert-red) / 0.5);
+  }
+  
+  /* Alert banner */
+  .alert-banner {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg;
+    background: linear-gradient(135deg, hsl(0 85% 20% / 0.4) 0%, hsl(0 85% 15% / 0.3) 100%);
+    border: 1px solid hsl(var(--alert-red) / 0.5);
+  }
+  
+  /* Status badges */
+  .status-badge {
+    @apply px-2 py-0.5 rounded text-xs font-mono font-semibold uppercase tracking-wider;
+  }
+  
+  .status-approaching {
+    @apply bg-primary/20 text-primary;
+  }
+  
+  .status-holding {
+    @apply bg-holding-yellow/20 text-holding-yellow;
+  }
+  
+  .status-landed {
+    @apply bg-muted text-muted-foreground;
+  }
+  
+  /* Coordinate box */
+  .coord-box {
+    @apply font-mono text-sm px-3 py-2 rounded-lg;
+    background: hsl(var(--card) / 0.9);
+    border: 1px solid hsl(var(--border) / 0.5);
+    backdrop-filter: blur(8px);
+  }
+  
+  /* Live sequence panel */
+  .live-panel {
+    @apply p-4 rounded-lg;
+    background: hsl(var(--card) / 0.9);
+    border: 1px solid hsl(var(--border) / 0.5);
+    backdrop-filter: blur(8px);
+  }
+  
+  /* Button variants */
+  .btn-radar {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    background: hsl(var(--secondary));
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .btn-radar:hover {
+    background: hsl(var(--secondary) / 0.8);
+    border-color: hsl(var(--primary) / 0.5);
+  }
+  
+  .btn-radar.active {
+    background: hsl(var(--primary) / 0.2);
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary));
+  }
+  
+  .btn-primary-glow {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+  
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.6);
+    transform: translateY(-1px);
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}
+
+/* Leaflet overrides for dark theme */
+.leaflet-container {
+  background: hsl(210 50% 5%) !important;
+}
+
+.leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2);
+}
+
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Aircraft highlight pulse animation - visible pulsing with runway color */
+@keyframes aircraft-highlight-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.85;
+  }
+}
+
+.aircraft-highlight-pulse {
+  animation: aircraft-highlight-pulse 0.5s ease-in-out infinite !important;
+}
+
+/* Label highlight pulse */
+@keyframes label-highlight-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.label-highlight-pulse {
+  animation: label-highlight-pulse 0.5s ease-in-out infinite !important;
+}
+
+/* Conflict glow animation - red pulsing */
+@keyframes conflict-glow {
+  0%, 100% { filter: drop-shadow(0 0 10px #ef4444) drop-shadow(0 0 5px #ef4444); }
+  50% { filter: drop-shadow(0 0 25px #ef4444) drop-shadow(0 0 15px #ef4444); }
+}
+
+.conflict-glow-active {
+  animation: conflict-glow 0.6s ease-in-out infinite !important;
+}
+
+/* Conflict glow animation - red pulsing */
+@keyframes conflict-glow {
+  0%, 100% { filter: drop-shadow(0 0 10px #ef4444) drop-shadow(0 0 5px #ef4444); }
+  50% { filter: drop-shadow(0 0 25px #ef4444) drop-shadow(0 0 15px #ef4444); }
+}
+
+.conflict-glow-active {
+  animation: conflict-glow 0.6s ease-in-out infinite !important;
+}
+
+.aircraft-div-icon {
+  z-index: 1000 !important;
+}

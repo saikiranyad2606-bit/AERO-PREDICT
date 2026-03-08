@@ -1,0 +1,4 @@
+project_id = "mhsmmhjsayhlooqussbz"
+
+[functions.aman]
+verify_jwt = false

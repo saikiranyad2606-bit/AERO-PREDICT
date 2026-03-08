@@ -1,0 +1,52 @@
+[
+  {
+    "id": "AI-101",
+    "callsign": "AI-101",
+    "lat": 17.35,
+    "lon": 78.28,
+    "altitude": 8000,
+    "speed": 280,
+    "heading": 90,
+    "runway": "09L"
+  },
+  {
+    "id": "6E-505",
+    "callsign": "6E-505",
+    "lat": 17.42,
+    "lon": 78.15,
+    "altitude": 12000,
+    "speed": 320,
+    "heading": 110,
+    "runway": "09R"
+  },
+  {
+    "id": "SG-302",
+    "callsign": "SG-302",
+    "lat": 17.12,
+    "lon": 78.55,
+    "altitude": 10000,
+    "speed": 290,
+    "heading": 280,
+    "runway": "09L"
+  },
+  {
+    "id": "UK-888",
+    "callsign": "UK-888",
+    "lat": 17.50,
+    "lon": 78.60,
+    "altitude": 15000,
+    "speed": 350,
+    "heading": 225,
+    "runway": "09R"
+  },
+  {
+    "id": "QR-777",
+    "callsign": "QR-777",
+    "lat": 17.08,
+    "lon": 78.22,
+    "altitude": 6000,
+    "speed": 240,
+    "heading": 45,
+    "runway": "09L"
+  }
+]
