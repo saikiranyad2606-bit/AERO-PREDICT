@@ -1,82 +1,122 @@
 # AeroPredict – AI Arrival Management System (AMAN)
 
-AeroPredict is an aviation analytics project that simulates an **Arrival Management System (AMAN)** used in modern air traffic management. The system analyzes incoming aircraft traffic and optimizes landing sequences based on runway capacity, estimated time of arrival (ETA), and operational constraints.
-
-The goal of the project is to demonstrate how **AI-driven decision support systems** can improve airport arrival flow, reduce airborne holding, and enhance runway utilization.
+AI-powered aviation analytics system that simulates an Arrival Management System (AMAN) used in modern air traffic management to optimize airport arrival flow and runway utilization.
 
 ---
 
-# Project Overview
+## Project Overview
 
-Airports often experience congestion when multiple aircraft arrive within a short time window. When runway demand exceeds capacity, aircraft are forced into holding patterns, which increases delays, fuel burn, and operational costs.
+Airports frequently experience congestion when multiple aircraft arrive within a short time window. When the demand for landing exceeds runway capacity, aircraft are forced into holding patterns, increasing delays, fuel consumption, and operational costs.
 
-AeroPredict simulates how an AMAN system helps manage this situation by:
+AeroPredict simulates how an Arrival Management System (AMAN) manages these situations by analyzing incoming aircraft traffic and assigning optimized landing sequences based on estimated time of arrival (ETA) and runway capacity constraints.
 
-* Monitoring incoming aircraft traffic
-* Calculating runway capacity
-* Assigning optimized landing slots
-* Identifying aircraft that require holding
-* Generating operational analytics
-
-This project demonstrates how **data-driven systems can support air traffic flow management and airline operations.**
+The project demonstrates how **data-driven decision systems and AI-based analytics** can improve airport operations and air traffic flow management.
 
 ---
 
-# Key Features
+## Key Features
 
 * Aircraft arrival sequencing based on ETA
 * Runway capacity modeling
-* Detection of holding patterns and delays
+* Detection of holding patterns and arrival delays
 * Delay and holding time analytics
-* Estimated fuel burn impact from airborne holding
-* Aviation operations data visualization
+* Estimated fuel burn impact from holding patterns
+* Aviation operations data simulation and analysis
 
 ---
 
-# Technologies Used
+## System Architecture
+
+Flight Data Source (Simulation / ADS-B)
+
+↓
+
+Arrival Processing Engine
+
+↓
+
+Runway Capacity Model
+
+↓
+
+Arrival Sequencing Algorithm
+
+↓
+
+Operational Analytics Engine
+
+↓
+
+API Output / Dashboard
+
+---
+
+## Technologies Used
 
 * **Python**
 * **FastAPI**
-* **Flight data simulation**
 * **Aviation analytics models**
+* **Flight data simulation**
 
 ---
 
-# System Workflow
+## Installation
 
-1. Aircraft arrival data is generated or received from simulation.
-2. The system calculates runway capacity constraints.
-3. Aircraft are sequenced for landing based on ETA and priority.
-4. If capacity is exceeded, aircraft are assigned holding time.
-5. The system generates operational metrics such as delays and holding duration.
+Clone the repository:
 
----
+git clone https://github.com/yourusername/AERO-PREDICT.git
 
-# Example Output Metrics
+Navigate to the project directory:
 
-The system provides operational insights such as:
+cd AERO-PREDICT
 
-* Total arriving aircraft
-* Runway utilization
-* Delay minutes
-* Aircraft in holding patterns
-* Estimated fuel burn due to holding
+Install dependencies:
+
+pip install -r requirements.txt
+
+Run the server:
+
+uvicorn main:app --reload
 
 ---
 
-# Project Purpose
+## API Endpoints
 
-This project was built to explore how **Artificial Intelligence and analytics can improve aviation operations**, particularly in:
+**GET /health**
+Returns system health status.
 
-* Air Traffic Flow Management (ATFM)
-* Airport capacity planning
-* Airline operational efficiency
+**GET /aircraft**
+Returns current aircraft in the simulation.
 
-It demonstrates concepts similar to those used in real-world arrival management systems deployed by air navigation service providers and airlines.
+**GET /analytics**
+Provides operational metrics such as delays, holding aircraft, and runway utilization.
+
+**POST /plan-routes**
+Processes aircraft arrivals and generates optimized landing sequencing.
 
 ---
 
-# Future Improvements
+## Example Output
+
+{
+"airport": "VOHS",
+"total_aircraft": 12,
+"runway_capacity": 8,
+"holding_aircraft": 3,
+"average_delay_minutes": 4.2
+}
+
+---
+
+## Project Purpose
+
+This project explores how **Artificial Intelligence and aviation analytics** can support airport and airline operations by improving arrival flow management, reducing congestion, and enhancing runway utilization.
+
+It demonstrates concepts similar to those used in real-world arrival management systems deployed by airlines and air navigation service providers.
+
+---
+
+## Future Improvements
 
 * Integration with **live ADS-B flight data**
 * Machine learning models for **arrival time prediction**
@@ -86,7 +126,6 @@ It demonstrates concepts similar to those used in real-world arrival management 
 
 ---
 
-# Author
+## Author
 
-AI & Aviation Analytics Project
-Developed as part of research and experimentation in **AI-driven aviation operations systems**.
+Developed as part of research and experimentation in **AI-driven aviation operations and analytics systems**.
